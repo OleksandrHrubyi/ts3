@@ -1,7 +1,7 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose"
 require("dotenv").config();
 
-const uriDb = process.env.URI_DB;
+const { uriDb = "http://localhost:3000" } = process.env;
 
 const db = mongoose.connect(uriDb, {
   useNewUrlParser: true,

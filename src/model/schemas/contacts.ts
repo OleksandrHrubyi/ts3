@@ -1,8 +1,17 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
+
 const { Schema, model, SchemaTypes } = mongoose;
 const mongoosePaginate = require("mongoose-paginate-v2");
 
-const contactsSchema = new Schema({
+interface IContact {
+  owner: string
+  name: string
+  email: string
+  phone: string
+  favorite?: boolean
+}
+
+const contactsSchema = new Schema<IContact>({
   owner: {
     type: SchemaTypes.ObjectId,
     ref: "user",
@@ -25,7 +34,7 @@ const contactsSchema = new Schema({
   },
 });
 
-contactsSchema.path("name").validate((value) => {
+contactsSchema.path("name").validate((value: string) => {
   const re = /[A-Z a-z]\w+/;
   return re.test(String(value));
 });
@@ -36,6 +45,6 @@ contactsSchema.virtual("strPhone").get(function () {
 
 contactsSchema.plugin(mongoosePaginate);
 
-const Contact = model("contact", contactsSchema);
+const Contact = model<IContact>("contact", contactsSchema);
 
 module.exports = Contact;
