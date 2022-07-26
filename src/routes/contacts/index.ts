@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 import { getAll, getById, createContact, rmContactById, updateContactsById, updateStatusFav } from "../../controllers/contacts";
-import { ctrlWrapper } from "../../helper/ctrlWrapper.js";
+import ctrlWrapper from "../../helper/ctrlWrapper.js";
 
 
 router.get("/", ctrlWrapper(getAll));

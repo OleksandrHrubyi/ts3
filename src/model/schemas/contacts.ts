@@ -40,7 +40,7 @@ contactsSchema.path("name").validate((value: string) => {
 });
 
 contactsSchema.virtual("strPhone").get(function () {
-  return `${this.phone} phone`;
+  return `phone`;
 });
 
 contactsSchema.plugin(mongoosePaginate);

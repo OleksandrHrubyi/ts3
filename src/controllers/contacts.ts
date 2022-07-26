@@ -36,7 +36,8 @@ const getAll = async (req: UserReq, res: Response, next: NextFunction): Promise<
 const getById = async (req: UserReq, res: Response, next: NextFunction) => {
   try {
     const userId = req.user?.id;
-    const user = await getContactById(userId, req.params.contactId);
+    const { contactId } = req.params
+    const user = await getContactById(userId, Number(contactId));
     if (user) {
       return res.json({
         status: "succes",
@@ -81,7 +82,7 @@ const rmContactById = async (req: UserReq, res: Response, next: NextFunction) =>
   try {
     const userId = req.user?.id;
     const { contactId } = req.params
-    const result = await removeContact(userId, contactId);
+    const result = await removeContact(userId, Number(contactId));
     if (result) {
       return res.json({
         status: "succes",
@@ -105,9 +106,10 @@ const rmContactById = async (req: UserReq, res: Response, next: NextFunction) =>
 const updateContactsById = async (req: UserReq, res: Response, next: NextFunction) => {
   try {
     const userId = req.user?.id;
+    const { contactId } = req.params
     const updatedUser = await updateContact(
       userId,
-      req.params.contactId,
+      Number(contactId),
       req.body
     );
 
@@ -126,10 +128,11 @@ const updateContactsById = async (req: UserReq, res: Response, next: NextFunctio
 const updateStatusFav = async (req: UserReq, res: Response, next: NextFunction) => {
   try {
     const { id } = req.user;
+    const { contactId } = req.params
     if (req.body.favorite) {
       const updateStatusContacts = await updateStatusContact(
         id,
-        req.params.contactId,
+        Number(contactId),
         req.body
       );
 

@@ -1,3 +1,5 @@
+import { boolean } from "joi";
+
 const Contacts = require("./schemas/contacts");
 
 const listContacts = async (userId: number, query) => {
@@ -9,7 +11,7 @@ const listContacts = async (userId: number, query) => {
     offset = 0,
   } = query;
 
-  const optionsSearch = { owner: userId };
+  const optionsSearch = { owner: userId, favorite: boolean };
 
   if (favorite !== null) {
     optionsSearch.favorite = favorite;
