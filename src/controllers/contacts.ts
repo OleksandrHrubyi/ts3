@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 
+
 import {
   listContacts,
   getContactById,
@@ -17,29 +18,22 @@ interface IUser extends Document {
   phone: string
 }
 
-interface IUserReq extends Document {
-  user: IUser
+interface UserReq extends Request {
+  user: IUser,
 }
 
 
-const getAll = async (req: Request, res: Response, next: NextFunction) => {
+const getAll = async (req: UserReq, res: Response, next: NextFunction): Promise<void> => {
   try {
     const userId: number = req.user?.id;
     const contacts: Array<IUser> = await listContacts(userId, req.query);
-    return res.json({
-      status: "succes",
-      code: 200,
-      message: "contact list in data",
-      data: {
-        contacts,
-      },
-    });
+    res.json(contacts);
   } catch (err) {
     next(err);
   }
 };
 
-const getById = async (req: Request, res: Response, next: NextFunction) => {
+const getById = async (req: UserReq, res: Response, next: NextFunction) => {
   try {
     const userId = req.user?.id;
     const user = await getContactById(userId, req.params.contactId);
@@ -66,7 +60,7 @@ const getById = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const createContact = async (req: Request, res: Response, next: NextFunction) => {
+const createContact = async (req: UserReq, res: Response, next: NextFunction) => {
   try {
     const userId = req.user?.id;
     const addContacts = await addContact(userId, req.body);
@@ -83,10 +77,11 @@ const createContact = async (req: Request, res: Response, next: NextFunction) =>
   }
 };
 
-const rmContactById = async (req: Request, res: Response, next: NextFunction) => {
+const rmContactById = async (req: UserReq, res: Response, next: NextFunction) => {
   try {
     const userId = req.user?.id;
-    const result = await removeContact(userId, req.params.contactId);
+    const { contactId } = req.params
+    const result = await removeContact(userId, contactId);
     if (result) {
       return res.json({
         status: "succes",
@@ -107,7 +102,7 @@ const rmContactById = async (req: Request, res: Response, next: NextFunction) =>
   }
 };
 
-const updateContactsById = async (req: Request, res: Response, next: NextFunction) => {
+const updateContactsById = async (req: UserReq, res: Response, next: NextFunction) => {
   try {
     const userId = req.user?.id;
     const updatedUser = await updateContact(
@@ -128,7 +123,7 @@ const updateContactsById = async (req: Request, res: Response, next: NextFunctio
   }
 };
 
-const updateStatusFav = async (req: Request, res: Response, next: NextFunction) => {
+const updateStatusFav = async (req: UserReq, res: Response, next: NextFunction) => {
   try {
     const { id } = req.user;
     if (req.body.favorite) {

@@ -1,9 +1,9 @@
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
 
 const { Schema, model, SchemaTypes } = mongoose;
 const mongoosePaginate = require("mongoose-paginate-v2");
 
-interface IContact {
+interface IContact extends Document {
   owner: string
   name: string
   email: string
